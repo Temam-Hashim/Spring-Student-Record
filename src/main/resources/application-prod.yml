@@ -1,0 +1,44 @@
+info:
+    app:
+        description: Master Spring Boot Course
+        name: Master Spring Boot Course
+        version: 1.0.0
+    company:
+        address: Addis Ababa Ethiopia
+        description: Tcoder International Programming center
+        name: Tcoder
+logging:
+    file:
+        name: logger.log
+        path: ./log
+management:
+    endpoint:
+        health:
+            show-details: always
+    endpoints:
+        web:
+            exposure:
+                include: info,health,prometheus
+server:
+    error:
+        include-binding-errors: always
+        include-message: always
+        include-stacktrace: never
+    port: 8081
+spring:
+    datasource:
+        password: temam
+        url: jdbc:h2:mem:testdb-prod-env
+        username: temam
+    h2:
+        console:
+            enabled: true
+            path: /h2-prod
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+        properties:
+            hibernate:
+                format_sql: true
+        show-sql: true
+    main:
+        banner-mode: 'off'

@@ -1,0 +1,1 @@
+ALTER TABLE course ADD COLUMN department VARCHAR(100);

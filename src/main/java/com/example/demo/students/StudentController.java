@@ -1,20 +1,58 @@
 package com.example.demo.students;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.UUID;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+
 
 @RestController
 @RequestMapping("api/v1/students")
 public class StudentController {
+    private final StudentService studentService;
 
-    @GetMapping()
-    public List<Student> getStudents(){
-        return List.of(new Student(UUID.randomUUID(),"Temam","Hashim","temam@gmail.com","0987656392",Student.Gender.MALE),
-        new Student(UUID.randomUUID(),"Sara","Jemal","sara@gmail.com","0982356392",Student.Gender.FEMALE)
-    );
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
+
+
+    @GetMapping
+    public List<Student> getStudents(){
+        return studentService.getStudents();
+//        throw new NotFoundException("sorry no students found");
+    }
+
+    @GetMapping(path="{studentId}")
+    public Student getStudent(@PathVariable("studentId") UUID studentId){
+        return studentService.getStudent(studentId);
+    }
+
+    @PostMapping
+    public ResponseEntity<Map> addStudent(@Valid @RequestBody Student student){
+        int st = studentService.addStudent(null,student);
+        Map<String,String> map = new HashMap();
+        map.put("message","student created");
+        map.put("status","success");
+        map.put("code","200");
+
+        if(st==1){
+            return ResponseEntity.status(HttpStatus.CREATED).body(map);
+        }
+        return null;
+    }
+
+    @DeleteMapping(path = "studentId")
+    public void deleteStudent(@PathVariable("studnetId") UUID studentId){
+        studentService.deleteStudent(studentId);
+    }
+
+
+
+
+
 }
